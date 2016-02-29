@@ -1,6 +1,6 @@
 #include <math.h>
 #include <stdio.h>
-#include <windows.h>
+//#include <windows.h>
 
 void int_to_words(int num) {
     int i;
@@ -8,15 +8,15 @@ void int_to_words(int num) {
     for(i = 100; num != 0; i /= 10) {
         if(i == 10 && num / 10 == 1) {
             switch(num / i) {
-                case 1: printf("Одиннадцать ");break;
-                case 2: printf("Двадцать ");break;
-                case 3: printf("Тридцать ");break;
-                case 4: printf("Четырнадцать ");break;
-                case 5: printf("Пятнадцать ");break;
-                case 6: printf("Шестнадцать ");break;
-                case 7: printf("Семнадцать ");break;
-                case 8: printf("Восемнадцать ");break;
-                case 9: printf("Девятнадцать ");break;
+                case 1: printf("РћРґРёРЅРЅР°РґС†Р°С‚СЊ ");break;
+                case 2: printf("Р”РІР°РґС†Р°С‚СЊ ");break;
+                case 3: printf("РўСЂРёРґС†Р°С‚СЊ ");break;
+                case 4: printf("Р§РµС‚С‹СЂРЅР°РґС†Р°С‚СЊ ");break;
+                case 5: printf("РџСЏС‚РЅР°РґС†Р°С‚СЊ ");break;
+                case 6: printf("РЁРµСЃС‚РЅР°РґС†Р°С‚СЊ ");break;
+                case 7: printf("РЎРµРјРЅР°РґС†Р°С‚СЊ ");break;
+                case 8: printf("Р’РѕСЃРµРјРЅР°РґС†Р°С‚СЊ ");break;
+                case 9: printf("Р”РµРІСЏС‚РЅР°РґС†Р°С‚СЊ ");break;
                 default: break;
             }
             i /= 10;
@@ -24,41 +24,41 @@ void int_to_words(int num) {
 
         else if(i == 1)
             switch(num / i) {
-                case 1: printf("Один ");break;
-                case 2: printf("Два ");break;
-                case 3: printf("Три ");break;
-                case 4: printf("Четыре ");break;
-                case 5: printf("Пять ");break;
-                case 6: printf("Шесть ");break;
-                case 7: printf("Семь ");break;
-                case 8: printf("Восемь ");break;
-                case 9: printf("Девять ");break;
+                case 1: printf("РћРґРёРЅ ");break;
+                case 2: printf("Р”РІР° ");break;
+                case 3: printf("РўСЂРё ");break;
+                case 4: printf("Р§РµС‚С‹СЂРµ ");break;
+                case 5: printf("РџСЏС‚СЊ ");break;
+                case 6: printf("РЁРµСЃС‚СЊ ");break;
+                case 7: printf("РЎРµРјСЊ ");break;
+                case 8: printf("Р’РѕСЃРµРјСЊ ");break;
+                case 9: printf("Р”РµРІСЏС‚СЊ ");break;
                 default: break;
             }
         else if(i == 10)
             switch(num / i) {
-                case 1: printf("Десять ");break;
-                case 2: printf("Двадцать ");break;
-                case 3: printf("Тридцать ");break;
-                case 4: printf("Сорок ");break;
-                case 5: printf("Пятьдесят ");break;
-                case 6: printf("Шестьдесят ");break;
-                case 7: printf("Семьдесят ");break;
-                case 8: printf("Восемьдесят ");break;
-                case 9: printf("Девяносто ");break;
+                case 1: printf("Р”РµСЃСЏС‚СЊ ");break;
+                case 2: printf("Р”РІР°РґС†Р°С‚СЊ ");break;
+                case 3: printf("РўСЂРёРґС†Р°С‚СЊ ");break;
+                case 4: printf("РЎРѕСЂРѕРє ");break;
+                case 5: printf("РџСЏС‚СЊРґРµСЃСЏС‚ ");break;
+                case 6: printf("РЁРµСЃС‚СЊРґРµСЃСЏС‚ ");break;
+                case 7: printf("РЎРµРјСЊРґРµСЃСЏС‚ ");break;
+                case 8: printf("Р’РѕСЃРµРјСЊРґРµСЃСЏС‚ ");break;
+                case 9: printf("Р”РµРІСЏРЅРѕСЃС‚Рѕ ");break;
                 default: break;
             }
         else if(i == 100)
             switch(num / i) {
-                case 1: printf("Сто ");break;
-                case 2: printf("Двести ");break;
-                case 3: printf("Триста ");break;
-                case 4: printf("Четыреста ");break;
-                case 5: printf("Пятьсот ");break;
-                case 6: printf("Шестьсот ");break;
-                case 7: printf("Семьсот ");break;
-                case 8: printf("Восемьсот ");break;
-                case 9: printf("Девятьсот ");break;
+                case 1: printf("РЎС‚Рѕ ");break;
+                case 2: printf("Р”РІРµСЃС‚Рё ");break;
+                case 3: printf("РўСЂРёСЃС‚Р° ");break;
+                case 4: printf("Р§РµС‚С‹СЂРµСЃС‚Р° ");break;
+                case 5: printf("РџСЏС‚СЊСЃРѕС‚ ");break;
+                case 6: printf("РЁРµСЃС‚СЊСЃРѕС‚ ");break;
+                case 7: printf("РЎРµРјСЊСЃРѕС‚ ");break;
+                case 8: printf("Р’РѕСЃРµРјСЊСЃРѕС‚ ");break;
+                case 9: printf("Р”РµРІСЏС‚СЊСЃРѕС‚ ");break;
                 default: break;
             }
         num %= i;
@@ -77,16 +77,16 @@ void print_ender(int num, char** enders) {
 }
 
 void main() {
-    SetConsoleCP(1251);
-    SetConsoleOutputCP(1251);
+    //SetConsoleCP(1251);
+    //SetConsoleOutputCP(1251);
 
-    char *rub_enders[3] = {"Рублей ", "Рубля ", "Рубль "},
-         *kop_enders[3] = {"Копеек ", "Копейки ", "Копейка "};
+    char *rub_enders[3] = {"Р СѓР±Р»РµР№ ", "Р СѓР±Р»СЏ ", "Р СѓР±Р»СЊ "},
+         *kop_enders[3] = {"РљРѕРїРµРµРє ", "РљРѕРїРµР№РєРё ", "РљРѕРїРµР№РєР° "};
 
     float sum;
     int rub, kop;
 
-    printf("Введите сумму");
+    printf("Р’РІРµРґРёС‚Рµ СЃСѓРјРјСѓ\n");
     scanf("%f", &sum);
 
     rub = (int)sum;
@@ -95,7 +95,7 @@ void main() {
     if (rub != 0)
         int_to_words(rub);
     else
-        printf("Ноль ");
+        printf("РќРѕР»СЊ ");
 
     print_ender(rub, rub_enders);
     printf("%d ", kop);
