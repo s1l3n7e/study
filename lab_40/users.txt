@@ -1,0 +1,8 @@
+{
+name:alexey,
+pass:qwerty
+},
+{
+name:npm,
+pass:ecma6
+}
