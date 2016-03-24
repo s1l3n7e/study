@@ -1,17 +1,19 @@
 #include <iostream>
 #include <stack>
 #include <vector>
+#include <math.h>
 
 using namespace std;
 
 const char
-        COMMA = ',',
+        DOT = '.',
         OPENING = '(',
         CLOSING = ')',
         MULT = '*',
         DIV = '/',
         PLUS = '+',
-        MINUS = '-';
+        MINUS = '-',
+        MOD = '%';
 
 int getPriority(char op) { // Приоритеты операций
     if (op == MULT || op == DIV)
@@ -30,7 +32,7 @@ vector<string> toPostfix(string input) { // Конвертация в постф
     while(i < input.size()) { // Пока есть символ для чтения, читаем очередной символ
         if(isdigit(input[i])) { // Если символ является числом
             output.push_back(""); // Добавляем пустую строку к выходному массиву
-            while(isdigit(input[i]) || input[i] == COMMA) { // Проверка на многозначность и плавающую точку
+            while(isdigit(input[i]) || input[i] == DOT) { // Проверка на многозначность и плавающую точку
                 output.back() += input[i];
                 i++;
             }
@@ -63,28 +65,26 @@ vector<string> toPostfix(string input) { // Конвертация в постф
     }
     cout << "RPN-style: ";
     for(i=0; i < output.size(); i++)
-        cout << output[i];
+        cout << output[i] << " ";
     cout << "\n";
 
     return output;
 }
 
-string calculate(vector<string> numbers, string oper) { // Операции с числами
-    float result;
+string calculate(vector<string> nums, string oper) { // Операции с числами
+    double result = 0;
     char op = oper[0];
-    if (op == MULT || op == DIV)
-        result = 1;
-    else result = 0;
-    for(int i = 0; i < numbers.size(); i++) {
-        if (op == MULT)
-            result *= stof(numbers[i]);
-        else if (op == DIV)
-            result /= stof(numbers[i]);
-        else if (op == PLUS)
-            result += stof(numbers[i]);
-        else if (op == MINUS)
-            result -= stof(numbers[i]);
-    }
+
+    if (op == MOD)
+        result = fmod(stof(nums[1]), stof(nums[0]));
+    else if (op == MULT)
+        result = stof(nums[1]) * stof(nums[0]);
+    else if (op == DIV)
+        result = stof(nums[1]) / stof(nums[0]);
+    else if (op == PLUS)
+        result = stof(nums[1]) + stof(nums[0]);
+    else if (op == MINUS)
+        result = stof(nums[1]) - stof(nums[0]);
     return to_string(result);
 }
 
