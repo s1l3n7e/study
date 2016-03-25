@@ -49,6 +49,9 @@ vector<string> toPostfix(string input) { // Конвертация в постф
             s.pop(); // При этом открывающая скобка удаляется из стека
             i++;
         }
+        else if (isspace(input[i])) {
+            i++;
+        }
         else{ // Если символ является оператором
             while (s.size() > 0
                    && getPriority(input[i]) <= getPriority(s.top()[0])) { // пока приоритет оператора меньше приоритета оператора, находящегося на вершине стека
@@ -74,17 +77,19 @@ vector<string> toPostfix(string input) { // Конвертация в постф
 string calculate(vector<string> nums, string oper) { // Операции с числами
     double result = 0;
     char op = oper[0];
+    float o1 = stof(nums[1]),
+            o2 = stof(nums[0]);
 
     if (op == MOD)
-        result = fmod(stof(nums[1]), stof(nums[0]));
+        result = fmod(o1, o2);
     else if (op == MULT)
-        result = stof(nums[1]) * stof(nums[0]);
+        result = o1 * o2;
     else if (op == DIV)
-        result = stof(nums[1]) / stof(nums[0]);
+        result = o1 / o2;
     else if (op == PLUS)
-        result = stof(nums[1]) + stof(nums[0]);
+        result = o1 + o2;
     else if (op == MINUS)
-        result = stof(nums[1]) - stof(nums[0]);
+        result = o1 - o2;
     return to_string(result);
 }
 
@@ -111,7 +116,7 @@ float rpn (string inp) { // Вычисления на стеке
 int main() {
     string input;
     cout << "Введите выражение\n";
-    cin >> input;
+    getline(cin, input);
     cout << "\n";
     cout << "Result: " << rpn(input);
 }
