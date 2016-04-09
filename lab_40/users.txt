@@ -1,8 +1,1 @@
-{
-name:alexey,
-pass:qwerty
-},
-{
-name:npm,
-pass:ecma6
-}
+username:boris666,password:666,

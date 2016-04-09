@@ -15,8 +15,11 @@ const char
         MINUS = '-',
         MOD = '%';
 
-int getPriority(char op) { // РџСЂРёРѕСЂРёС‚РµС‚С‹ РѕРїРµСЂР°С†РёР№
-    if (op == MULT || op == DIV)
+const string OPERATORS = "*/+-%";
+
+/* приоритеты операций */
+int getPriority(char op) {
+    if (op == MULT || op == DIV || op == MOD)
         return 2;
     else if (op == PLUS || op == MINUS)
         return 1;
@@ -24,99 +27,125 @@ int getPriority(char op) { // РџСЂРёРѕСЂРёС‚РµС‚С‹ РѕРїРµСЂР°С†РёР№
         return 0;
 }
 
-vector<string> toPostfix(string input) { // РљРѕРЅРІРµСЂС‚Р°С†РёСЏ РІ РїРѕСЃС‚С„РёРєСЃРЅСѓСЋ РЅРѕС‚Р°С†РёСЋ
+/* конвертация в постфиксную нотацию */
+vector<string> toPostfix(string input) {
     stack<string> s;
     vector<string> output;
+    bool err = false; // флаг ошибки чтения
     int i = 0;
-
-    while(i < input.size()) { // РџРѕРєР° РµСЃС‚СЊ СЃРёРјРІРѕР» РґР»СЏ С‡С‚РµРЅРёСЏ, С‡РёС‚Р°РµРј РѕС‡РµСЂРµРґРЅРѕР№ СЃРёРјРІРѕР»
-        if(isdigit(input[i])) { // Р•СЃР»Рё СЃРёРјРІРѕР» СЏРІР»СЏРµС‚СЃСЏ С‡РёСЃР»РѕРј
-            output.push_back(""); // Р”РѕР±Р°РІР»СЏРµРј РїСѓСЃС‚СѓСЋ СЃС‚СЂРѕРєСѓ Рє РІС‹С…РѕРґРЅРѕРјСѓ РјР°СЃСЃРёРІСѓ
-            while(isdigit(input[i]) || input[i] == DOT) { // РџСЂРѕРІРµСЂРєР° РЅР° РјРЅРѕРіРѕР·РЅР°С‡РЅРѕСЃС‚СЊ Рё РїР»Р°РІР°СЋС‰СѓСЋ С‚РѕС‡РєСѓ
+    /* читаем, пока есть символы */
+    while(i < input.size() && !err) {
+        /* если символ является числом */
+        if(isdigit(input[i])) {
+            output.push_back(""); // добавляем пустую строку к выходному массиву
+            while(isdigit(input[i]) || input[i] == DOT) { // проверка на многозначность и плавающую точку
                 output.back() += input[i];
                 i++;
             }
         }
-        else if(input[i] == OPENING) { // Р•СЃР»Рё СЃРёРјРІРѕР» СЏРІР»СЏРµС‚СЃСЏ РѕС‚РєСЂС‹РІР°СЋС‰РµР№ СЃРєРѕР±РєРѕР№, РїРѕРјРµС‰Р°РµРј РµРіРѕ РІ СЃС‚РµРє
-            s.push(string(1, input[i]));
+        /* если символ является открывающей скобкой */
+        else if(input[i] == OPENING) {
+            s.push(string(1, input[i])); // помещаем его в стек
             i++;
         }
-        else if(input[i] == CLOSING){ // Р•СЃР»Рё СЃРёРјРІРѕР» СЏРІР»СЏРµС‚СЃСЏ Р·Р°РєСЂС‹РІР°СЋС‰РµР№ СЃРєРѕР±РєРѕР№
-            while(s.top()[0] != OPENING) { // Р”Рѕ С‚РµС… РїРѕСЂ, РїРѕРєР° РІРµСЂС…РЅРёРј СЌР»РµРјРµРЅС‚РѕРј РЅРµ СЃС‚Р°РЅРµС‚ РѕС‚РєСЂС‹РІР°СЋС‰Р°СЏ СЃРєРѕР±РєР°
-                output.push_back(s.top()); // Р’С‹С‚Р°Р»РєРёРІР°РµРј СЌР»РµРјРµРЅС‚С‹ РёР· СЃС‚РµРєР° РІ РІС‹С…РѕРґРЅРѕР№ РјР°СЃСЃРёРІ
+        /* если символ является закрывающей скобкой */
+        else if(input[i] == CLOSING){
+            while(s.top()[0] != OPENING) { // до тех пор, пока верхним элементом не станет открывающая скобка
+                output.push_back(s.top()); // выталкиваем элементы из стека в выходной массив
                 s.pop();
             }
-            s.pop(); // РџСЂРё СЌС‚РѕРј РѕС‚РєСЂС‹РІР°СЋС‰Р°СЏ СЃРєРѕР±РєР° СѓРґР°Р»СЏРµС‚СЃСЏ РёР· СЃС‚РµРєР°
+            s.pop(); // при этом открывающая скобка удаляется из стека
             i++;
         }
         else if (isspace(input[i])) {
             i++;
         }
-        else{ // Р•СЃР»Рё СЃРёРјРІРѕР» СЏРІР»СЏРµС‚СЃСЏ РѕРїРµСЂР°С‚РѕСЂРѕРј
+        /* если символ является оператором */
+        else if (OPERATORS.find(input[i]) != string::npos){
             while (s.size() > 0
-                   && getPriority(input[i]) <= getPriority(s.top()[0])) { // РїРѕРєР° РїСЂРёРѕСЂРёС‚РµС‚ РѕРїРµСЂР°С‚РѕСЂР° РјРµРЅСЊС€Рµ РїСЂРёРѕСЂРёС‚РµС‚Р° РѕРїРµСЂР°С‚РѕСЂР°, РЅР°С…РѕРґСЏС‰РµРіРѕСЃСЏ РЅР° РІРµСЂС€РёРЅРµ СЃС‚РµРєР°
-                output.push_back(s.top()); // Р’С‹С‚Р°Р»РєРёРІР°РµРј СЌР»РµРјРµРЅС‚С‹ СЃС‚РµРєР° РІ РІС‹С…РѕРґРЅРѕР№ РјР°СЃСЃРёРІ
+                   && getPriority(input[i]) <= getPriority(s.top()[0])) { // пока приоритет оператора меньше приоритета оператора, находящегося на вершине стека
+                output.push_back(s.top()); // выталкиваем элементы стека в выходной массив
                 s.pop();
             }
-            s.push(string(1,input[i])); // РџРѕРјРµС‰Р°РµРј РѕРїРµСЂР°С‚РѕСЂ РІ СЃС‚СЌРє
+            s.push(string(1,input[i])); // помещаем оператор в стэк
             i++;
         }
+        /* если символ не поддерживается */
+        else
+            err = true;
     }
-    while(s.size() != 0) {
-        output.push_back(s.top()); // РљРѕРіРґР° РІС…РѕРґРЅР°СЏ СЃС‚СЂРѕРєР° Р·Р°РєРѕРЅС‡РёР»Р°СЃСЊ, РІС‹С‚Р°Р»РєРёРІР°РµРј РІСЃРµ СЃРёРјРІРѕР»С‹ РІ РІС‹С…РѕРґРЅРѕР№ РјР°СЃСЃРёРІ
-        s.pop();
+    if (!err) {
+        while (s.size() != 0) {
+            output.push_back(s.top()); // когда входная строка закончилась, выталкиваем все символы в выходной массив
+            s.pop();
+        }
+        cout << "RPN-style: ";
+        for (i = 0; i < output.size(); i++)
+            cout << output[i] << " ";
+        cout << endl;
     }
-    cout << "RPN-style: ";
-    for(i=0; i < output.size(); i++)
-        cout << output[i] << " ";
-    cout << "\n";
+    else {
+        output.clear();
+        output.push_back("error");
+    }
 
     return output;
 }
 
-string calculate(vector<string> nums, string oper) { // РћРїРµСЂР°С†РёРё СЃ С‡РёСЃР»Р°РјРё
-    double result = 0;
-    char op = oper[0];
-    float o1 = stof(nums[1]),
-            o2 = stof(nums[0]);
+/* операции с числами */
+string calculate(vector<string> nums, string oper) {
+    double result = 0,
+    o1 = stof(nums[0]),
+    o2 = stof(nums[1]);
 
-    if (op == MOD)
-        result = fmod(o1, o2);
-    else if (op == MULT)
+    char op = oper[0];
+
+    if (op == MULT)
         result = o1 * o2;
-    else if (op == DIV)
-        result = o1 / o2;
+    else if (op == DIV){
+        if (o1 == 0)
+            result = 0;
+        else
+            result = o2 / o1;
+        }
     else if (op == PLUS)
         result = o1 + o2;
     else if (op == MINUS)
-        result = o1 - o2;
+        result = o2 - o1;
+    else if (op == MOD)
+        result = fmod(o1, o2);
     return to_string(result);
 }
 
-float rpn (string inp) { // Р’С‹С‡РёСЃР»РµРЅРёСЏ РЅР° СЃС‚РµРєРµ
+/* вычисления на стеке */
+float rpn (string inp) {
     vector<string> input = toPostfix(inp);
+    if(input[0] == "error") {
+        cout <<"!неверное выражение!" << endl;
+        return 0;
+    }
     vector<string> numbers;
     stack<string> s;
     for(int i = 0; i < input.size(); i++) {
-        if(isdigit(input[i][0])) { // Р•СЃР»Рё РЅР° РІС…РѕРґ РїРѕРґР°РЅ РѕРїРµСЂР°РЅРґ, РѕРЅ РїРѕРјРµС‰Р°РµС‚СЃСЏ РЅР° РІРµСЂС€РёРЅСѓ СЃС‚РµРєР°
+        if(isdigit(input[i][0])) { // если на вход подан операнд, он помещается на вершину стека
             s.push(input[i]);
         }
-        else{ // Р•СЃР»Рё РЅР° РІС…РѕРґ РїРѕРґР°РЅ Р·РЅР°Рє РѕРїРµСЂР°С†РёРё
-            while(s.size() > 0) {
+        else{ // если на вход подан знак операции
+            for (int j = 0; j < 2; j++) {
                 numbers.push_back(s.top());
                 s.pop();
             }
-            s.push(calculate(numbers, input[i])); // С‚Рѕ СЃРѕРѕС‚СЃРІРµС‚СЃРІСѓСЋС‰Р°СЏ РѕРїРµСЂР°С†РёСЏ РІС‹РїРѕР»РЅСЏРµС‚СЃСЏ РЅР°Рґ С‚СЂРµР±СѓРµРјС‹Рј РєРѕР»-РІРѕРј Р·РЅР°С‡РµРЅРёР№
+            s.push(calculate(numbers, input[i])); // то соотсветсвующая операция выполняется над требуемым кол-вом значений
             numbers.clear();
         }
     }
-    return stof(s.top()); // РџРѕСЃР»Рµ РїРѕР»РЅРѕР№ РѕР±СЂР°Р±РѕС‚РєРё РІС…РѕРґРЅРѕРіРѕ РЅР°Р±РѕСЂР° СЃРёРјРІРѕР»РѕРІ СЂРµР·СѓР»СЊС‚Р°С‚ Р»РµР¶РёС‚ РЅР° РІРµСЂС€РёРЅСѓ СЃС‚РµРєР°
+    return stof(s.top()); // после полной обработки входного набора символов результат лежит на вершину стека
 }
 
 int main() {
+    setlocale(LC_ALL, "Russian");
     string input;
-    cout << "Р’РІРµРґРёС‚Рµ РІС‹СЂР°Р¶РµРЅРёРµ\n";
+    cout << "Введите выражение" << endl;
     getline(cin, input);
-    cout << "\n";
     cout << "Result: " << rpn(input);
 }
